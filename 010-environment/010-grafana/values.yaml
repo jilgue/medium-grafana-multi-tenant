@@ -1,0 +1,11 @@
+image:
+  tag: 8.2.5
+admin:
+  existingSecret: grafana-admin
+service:
+  type: ClusterIP
+  port: 3000
+  labels: {}
+grafana.ini:
+  auth.basic:
+    enabled: true
