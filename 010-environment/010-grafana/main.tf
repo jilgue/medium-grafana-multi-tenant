@@ -51,3 +51,7 @@ resource "helm_release" "this" {
 
   depends_on = [kubernetes_secret.admin]
 }
+
+output "admin_password" {
+  value = "${kubernetes_secret.admin.data.admin-password}"
+}
