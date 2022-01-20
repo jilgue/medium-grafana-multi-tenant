@@ -23,6 +23,11 @@ provider "kubernetes" {
   config_context = "kind-kind"
 }
 
+resource "random_password" "this" {
+  length           = 16
+  special          = true
+  override_special = "_%@"
+}
 
 resource "kubernetes_secret" "admin" {
   metadata {
@@ -32,7 +37,7 @@ resource "kubernetes_secret" "admin" {
 
   data = {
     admin-user     = "admin"
-    admin-password = "admin"
+    admin-password = random_password.this.result
   }
 
   type = "Opaque"
@@ -53,5 +58,6 @@ resource "helm_release" "this" {
 }
 
 output "admin_password" {
-  value = "${kubernetes_secret.admin.data.admin-password}"
+  value = kubernetes_secret.admin.data.admin-password
+  sensitive = true
 }
